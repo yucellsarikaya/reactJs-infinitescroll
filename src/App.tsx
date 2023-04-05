@@ -68,3 +68,4 @@ export default App;
 
 // const res = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=5")
 // const posts = await res.json();
+//https://jsonplaceholder.typicode.com/photos?_start=4&_limit=2 //TODO
