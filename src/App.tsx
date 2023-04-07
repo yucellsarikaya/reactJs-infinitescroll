@@ -9,7 +9,7 @@ const style = {
 };
 
 function App() {
-  let [ArrayLength, setArrayLength] = useState(20);
+  let [ArrayLength, setArrayLength] = useState(0);
   const [dataSource, setDataSource] = useState(
     Array.from({ length: ArrayLength })
   );
@@ -21,16 +21,16 @@ function App() {
 
   const Fecth = async () => {
     const res = await fetch(
-      `https://jsonplaceholder.typicode.com/posts?_limit=${ArrayLength}`
+      `https://jsonplaceholder.typicode.com/photos?_start=${ArrayLength}&_limit=10`
     );
     const posts = await res.json();
-    setFakeArray(posts);
+    setFakeArray(FakeArray.concat(posts));
   };
   const [hasMore, setHasMore] = useState(true);
   const fetchMoreData = async () => {
     if (ArrayLength < 101) {
       await Fecth();
-      ArrayLength = ArrayLength + 20;
+      ArrayLength = ArrayLength + 10;
       setArrayLength(ArrayLength);
       setDataSource(dataSource.concat(Array.from({ length: ArrayLength })));
     } else {
@@ -49,7 +49,6 @@ function App() {
           hasMore={hasMore}
           loader={<p>Loading..</p>}
           endMessage={<p>Page End!</p>}
-          // height={520}
           scrollableTarget="parentScrollDiv"
         >
           {FakeArray.map((item, index) => {
@@ -65,7 +64,3 @@ function App() {
   );
 }
 export default App;
-
-// const res = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=5")
-// const posts = await res.json();
-//https://jsonplaceholder.typicode.com/photos?_start=4&_limit=2 //TODO
