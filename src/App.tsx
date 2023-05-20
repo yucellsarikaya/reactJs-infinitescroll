@@ -9,10 +9,7 @@ const style = {
 };
 
 function App() {
-  let [ArrayLength, setArrayLength] = useState(0);
-  const [dataSource, setDataSource] = useState(
-    Array.from({ length: ArrayLength })
-  );
+  let [ArrayStart, setArrayStart] = useState(0); 
   const [FakeArray, setFakeArray] = useState<any[]>([]);
 
   useEffect(() => {
@@ -21,35 +18,37 @@ function App() {
 
   const Fecth = async () => {
     const res = await fetch(
-      `https://jsonplaceholder.typicode.com/photos?_start=${ArrayLength}&_limit=10`
+      `https://jsonplaceholder.typicode.com/photos?_start=${ArrayStart}&_limit=10`
     );
-    const posts = await res.json();
-    setFakeArray(FakeArray.concat(posts));
+    const resData = await res.json();
+    setFakeArray(FakeArray.concat(resData));
   };
+
   const [hasMore, setHasMore] = useState(true);
+
   const fetchMoreData = async () => {
-    if (ArrayLength < 101) {
+    if (ArrayStart < 101) {
       await Fecth();
-      ArrayLength = ArrayLength + 10;
-      setArrayLength(ArrayLength);
-      setDataSource(dataSource.concat(Array.from({ length: ArrayLength })));
+      ArrayStart = ArrayStart + 10;
+      setArrayStart(ArrayStart);
     } else {
       setHasMore(false);
     }
   };
+
   return (
     <div className="App">
       <p>
-        Title: <b>InfiniteScrool Example</b>
+        Title: <b>Infinite Scroll Example</b>
       </p>
-      <div id="parentScrollDiv" style={{ height: 500, overflow: "auto" }}>
+      <div>
         <InfiniteScroll
-          dataLength={dataSource.length}
+          dataLength={FakeArray.length}
           next={fetchMoreData}
           hasMore={hasMore}
           loader={<p>Loading..</p>}
           endMessage={<p>Page End!</p>}
-          scrollableTarget="parentScrollDiv"
+          height={"500px"}
         >
           {FakeArray.map((item, index) => {
             return (
@@ -63,4 +62,4 @@ function App() {
     </div>
   );
 }
-export default App;
+export default App; 
